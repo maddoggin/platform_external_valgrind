@@ -34,6 +34,7 @@ extern "C" {
 #include "pub_tool_libcbase.h"
 }
 
+#if 0 // moved to m_main.c
 // can't use VG_(memmove) since it is buggy.
 extern "C" void * memmove(void *a, const void *b, unsigned long size) {
   char *A = (char*)a;
@@ -49,6 +50,7 @@ extern "C" void * memmove(void *a, const void *b, unsigned long size) {
   }
   return a;
 }
+#endif
 
 extern "C" int memcmp(const void *a, const void *b, unsigned long c) {
   return VG_(memcmp)(a,b,c);

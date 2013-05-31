@@ -2512,6 +2512,23 @@ void* memcpy(void *dest, const void *src, SizeT n);
 void* memcpy(void *dest, const void *src, SizeT n) {
    return VG_(memcpy)(dest,src,n);
 }
+void* memmove(void *dest, const void *src, SizeT n);
+void* memmove(void *a, const void *b, SizeT size) {
+  char *A = (char*)a;
+  const char *B = (const char*)b;
+  if (A < B) {
+    unsigned long i;
+    for (i = 0; i < size; i++) {
+      A[i] = B[i];
+    }
+  } else if(A > B) {
+    unsigned long i;
+    for (i = 0; i < size; i++) {
+      A[size - i - 1] = B[size - i - 1];
+    }
+  }
+  return a;
+}
 void* memset(void *s, int c, SizeT n);
 void* memset(void *s, int c, SizeT n) {
   return VG_(memset)(s,c,n);
@@ -2544,6 +2561,21 @@ void __aeabi_unwind_cpp_pr1(void);
 void __aeabi_unwind_cpp_pr1(void){
    VG_(printf)("Something called __aeabi_unwind_cpp_pr1()\n");
    vg_assert(0);
+}
+
+void __aeabi_memcpy(void *d, const void *s, SizeT n);
+void __aeabi_memcpy(void *d, const void *s, SizeT n) {
+   memcpy(d, s, n);
+}
+
+void __aeabi_memmove(void *d, const void *s, SizeT n);
+void __aeabi_memmove(void *d, const void *s, SizeT n) {
+   memmove(d, s, n);
+}
+
+void __aeabi_memset(void *d, SizeT n, int c);
+void __aeabi_memset(void *d, SizeT n, int c) {
+   memset(d, c, n);
 }
 #endif
 
